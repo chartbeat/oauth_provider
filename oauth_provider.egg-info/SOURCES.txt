@@ -2,6 +2,7 @@
 .hgtags
 AUTHORS
 LICENSE
+README.md
 requirements.txt
 setup.cfg
 setup.py

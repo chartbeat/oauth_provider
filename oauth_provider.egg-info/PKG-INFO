@@ -1,6 +1,6 @@
-Metadata-Version: 1.0
+Metadata-Version: 1.1
 Name: oauth-provider
-Version: 1.1
+Version: 1.1.6
 Summary: Support of OAuth in Django.
 Home-page: http://code.welldev.org/django-oauth/
 Author: David Larlet
