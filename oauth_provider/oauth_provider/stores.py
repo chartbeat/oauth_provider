@@ -1,11 +1,14 @@
-from urlparse import urlparse
+from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from urllib.parse import urlparse
 
 from oauth.oauth import OAuthDataStore, OAuthError, escape
 
 from django.conf import settings
 
-from models import Nonce, Token, Consumer, Resource, generate_random
-from consts import VERIFIER_SIZE, MAX_URL_LENGTH, OUT_OF_BAND
+from .models import Nonce, Token, Consumer, Resource, generate_random
+from .consts import VERIFIER_SIZE, MAX_URL_LENGTH, OUT_OF_BAND
 
 OAUTH_BLACKLISTED_HOSTNAMES = getattr(settings, 'OAUTH_BLACKLISTED_HOSTNAMES', [])
 

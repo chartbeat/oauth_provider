@@ -1,6 +1,7 @@
+from __future__ import absolute_import
 from django.contrib import admin
 
-from models import Consumer, Token
+from .models import Consumer, Token
     
 class ConsumerAdmin(admin.ModelAdmin):
     pass

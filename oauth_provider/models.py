@@ -1,16 +1,19 @@
+from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
 import uuid
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
+import urllib.parse
 from time import time
 import oauth2 as oauth
 
 from django.db import models
 from django.contrib.auth.models import User
 
-from managers import TokenManager, ConsumerManager, ResourceManager
-from consts import KEY_SIZE, SECRET_SIZE, CONSUMER_KEY_SIZE, CONSUMER_STATES,\
+from .managers import TokenManager, ConsumerManager, ResourceManager
+from .consts import KEY_SIZE, SECRET_SIZE, CONSUMER_KEY_SIZE, CONSUMER_STATES,\
                    PENDING, VERIFIER_SIZE, MAX_URL_LENGTH, OUT_OF_BAND
-from utils import check_valid_callback
+from .utils import check_valid_callback
 
 generate_random = User.objects.make_random_password
 
@@ -67,7 +70,7 @@ class Token(models.Model):
     key = models.CharField(max_length=KEY_SIZE, null=True, blank=True)
     secret = models.CharField(max_length=SECRET_SIZE, null=True, blank=True)
     token_type = models.SmallIntegerField(choices=TOKEN_TYPES)
-    timestamp = models.IntegerField(default=long(time()))
+    timestamp = models.IntegerField(default=int(time()))
     is_approved = models.BooleanField(default=False)
     
     user = models.ForeignKey(User, null=True, blank=True, related_name='tokens')
@@ -96,7 +99,7 @@ class Token(models.Model):
             del token_dict['oauth_token_secret']
             del token_dict['oauth_callback_confirmed']
 
-        return urllib.urlencode(token_dict)
+        return urllib.parse.urlencode(token_dict)
 
     def generate_random_codes(self):
         """
@@ -112,13 +115,13 @@ class Token(models.Model):
         OAuth 1.0a, append the oauth_verifier.
         """
         if self.callback and self.verifier:
-            parts = urlparse.urlparse(self.callback)
+            parts = urllib.parse.urlparse(self.callback)
             scheme, netloc, path, params, query, fragment = parts[:6]
             if query:
                 query = '%s&oauth_verifier=%s' % (query, self.verifier)
             else:
                 query = 'oauth_verifier=%s' % self.verifier
-            return urlparse.urlunparse((scheme, netloc, path, params,
+            return urllib.parse.urlunparse((scheme, netloc, path, params,
                 query, fragment))
         return self.callback
 
